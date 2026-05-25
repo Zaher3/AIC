@@ -1,0 +1,287 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 900, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>API tRPC — Endpoints Securises par Role</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 85, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: left-label
+    elementType: text
+    bounds: [60, 110, 300, 25]
+    content:
+      fontSize: 14
+      color: "$accent"
+      fontFamily: "Liter"
+      letterSpacing: 2
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>ROUTERS</strong></p>
+  - elementId: router-auth
+    elementType: shape
+    bounds: [60, 145, 540, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: router-auth-text
+    elementType: text
+    bounds: [80, 145, 500, 38]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#7C3AED;"><strong>auth</strong></span> — me, signOut <span style="font-size:13px; color:$secondary;">(publicQuery + authedQuery)</span></p>
+  - elementId: router-comp
+    elementType: shape
+    bounds: [60, 188, 540, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: router-comp-text
+    elementType: text
+    bounds: [80, 188, 500, 38]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#1E3A5F;"><strong>companies</strong></span> — list, get, create, update, delete <span style="font-size:13px; color:$secondary;">(authed + directeur)</span></p>
+  - elementId: router-proj
+    elementType: shape
+    bounds: [60, 231, 540, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: router-proj-text
+    elementType: text
+    bounds: [80, 231, 500, 38]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#1E3A5F;"><strong>projects</strong></span> — list, get, create, update, delete <span style="font-size:13px; color:$secondary;">(+ RBAC middleware)</span></p>
+  - elementId: router-files
+    elementType: shape
+    bounds: [60, 274, 540, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: router-files-text
+    elementType: text
+    bounds: [80, 274, 500, 38]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#1E3A5F;"><strong>files</strong></span> — list, get, create, delete <span style="font-size:13px; color:$secondary;">(+ edit permission check)</span></p>
+  - elementId: right-label
+    elementType: text
+    bounds: [660, 110, 300, 25]
+    content:
+      fontSize: 14
+      color: "$accent"
+      fontFamily: "Liter"
+      letterSpacing: 2
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>MIDDLEWARE</strong></p>
+  - elementId: mw-public
+    elementType: shape
+    bounds: [660, 145, 560, 36]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#4ADE8010"
+    border: {style: solid, width: 1, color: "#4ADE8040"}
+  - elementId: mw-public-text
+    elementType: text
+    bounds: [680, 145, 520, 36]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#4ADE80;"><strong>publicQuery</strong></span> — Sans authentification (ping)</p>
+  - elementId: mw-authed
+    elementType: shape
+    bounds: [660, 188, 560, 36]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F10"
+    border: {style: solid, width: 1, color: "#1E3A5F40"}
+  - elementId: mw-authed-text
+    elementType: text
+    bounds: [680, 188, 520, 36]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#1E3A5F;"><strong>authedQuery</strong></span> — Requiert authentification JWT</p>
+  - elementId: mw-dir
+    elementType: shape
+    bounds: [660, 231, 560, 36]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#7C3AED10"
+    border: {style: solid, width: 1, color: "#7C3AED40"}
+  - elementId: mw-dir-text
+    elementType: text
+    bounds: [680, 231, 520, 36]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#7C3AED;"><strong>directeurQuery</strong></span> — Admin + Directeur uniquement</p>
+  - elementId: mw-admin
+    elementType: shape
+    bounds: [660, 274, 560, 36]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#DC262610"
+    border: {style: solid, width: 1, color: "#DC262640"}
+  - elementId: mw-admin-text
+    elementType: text
+    bounds: [680, 274, 520, 36]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><span style="color:#DC2626;"><strong>adminQuery</strong></span> — Admin uniquement</p>
+  - elementId: sharing-label
+    elementType: text
+    bounds: [60, 362, 400, 25]
+    content:
+      fontSize: 14
+      color: "$accent"
+      fontFamily: "Liter"
+      letterSpacing: 2
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>ENDPOINTS DE PARTAGE</strong></p>
+  - elementId: share1
+    elementType: shape
+    bounds: [60, 392, 370, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: share1-text
+    elementType: text
+    bounds: [80, 392, 330, 38]
+    content:
+      fontSize: 15
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><strong>projects.share</strong> <span style="font-size:13px; color:$secondary;">— Owner partage avec editor/viewer</span></p>
+  - elementId: share2
+    elementType: shape
+    bounds: [455, 392, 370, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: share2-text
+    elementType: text
+    bounds: [475, 392, 330, 38]
+    content:
+      fontSize: 15
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><strong>projects.revokeAccess</strong> <span style="font-size:13px; color:$secondary;">— Owner revoque un acces</span></p>
+  - elementId: share3
+    elementType: shape
+    bounds: [850, 392, 370, 38]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: share3-text
+    elementType: text
+    bounds: [870, 392, 330, 38]
+    content:
+      fontSize: 15
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p><strong>projects.requestEdit</strong> <span style="font-size:13px; color:$secondary;">— Directeur demande edition</span></p>
+  - elementId: code-bg
+    elementType: shape
+    bounds: [60, 440, 1160, 120]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$dark"
+  - elementId: code-text
+    elementType: text
+    bounds: [80, 450, 1120, 100]
+    content:
+      fontSize: 14
+      color: "#94A3B8"
+      fontFamily: "Liter"
+      lineHeight: 1.7
+      text: |
+        <p><span style="color:#64748B;">// Exemple d'utilisation cote frontend</span></p>
+        <p><span style="color:#4ADE80;">const</span> { data: projects } = trpc.projects.list.useQuery({ companyId: <span style="color:#F59E0B;">1</span> });</p>
+        <p><span style="color:#4ADE80;">const</span> create = trpc.projects.create.useMutation({ onSuccess: () =&gt; utils.projects.list.invalidate() });</p>
+  - elementId: bottom-line
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "13"

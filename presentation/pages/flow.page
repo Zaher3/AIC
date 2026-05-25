@@ -1,0 +1,605 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  # ===== TITLE =====
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 1000, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Flow de Communication — Interactions entre Couches</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 85, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+
+  # ===== LAYER 1 — FRONTEND CLIENT =====
+  - elementId: layer1-bg
+    elementType: shape
+    bounds: [60, 105, 700, 95]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 2, color: "$primary"}
+  - elementId: layer1-label
+    elementType: text
+    bounds: [70, 107, 160, 22]
+    content:
+      fontSize: 11
+      color: "$primary"
+      fontFamily: "Liter"
+      letterSpacing: 1
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>COUCHE CLIENT</strong></p>
+  - elementId: layer1-box1
+    elementType: shape
+    bounds: [72, 132, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F15"
+    border: {style: solid, width: 1, color: "$primary"}
+  - elementId: layer1-box1-text
+    elementType: text
+    bounds: [72, 132, 155, 55]
+    content:
+      fontSize: 14
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>React 19</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">UI Components</span></p>
+  - elementId: layer1-box2
+    elementType: shape
+    bounds: [237, 132, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F15"
+    border: {style: solid, width: 1, color: "$primary"}
+  - elementId: layer1-box2-text
+    elementType: text
+    bounds: [237, 132, 155, 55]
+    content:
+      fontSize: 14
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>tRPC Client</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Type-safe RPC calls</span></p>
+  - elementId: layer1-box3
+    elementType: shape
+    bounds: [402, 132, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F15"
+    border: {style: solid, width: 1, color: "$primary"}
+  - elementId: layer1-box3-text
+    elementType: text
+    bounds: [402, 132, 155, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>TanStack Query</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Cache + Sync state</span></p>
+  - elementId: layer1-box4
+    elementType: shape
+    bounds: [567, 132, 180, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#F59E0B15"
+    border: {style: solid, width: 1, color: "#F59E0B"}
+  - elementId: layer1-box4-text
+    elementType: text
+    bounds: [567, 132, 180, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Firebase SDK</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Cloud sync (async)</span></p>
+
+  # ===== ARROW 1: CLIENT → SERVER =====
+  - elementId: arrow1-line
+    elementType: shape
+    bounds: [390, 200, 0, 35]
+    shapeName: straightConnector1
+    arrow: ["arrow", null]
+    border: {style: solid, width: 2, color: "$primary"}
+  - elementId: arrow1-label-bg
+    elementType: shape
+    bounds: [420, 208, 160, 18]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$background"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: arrow1-label
+    elementType: text
+    bounds: [420, 208, 160, 18]
+    content:
+      fontSize: 10
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p><strong>HTTP / tRPC protocol</strong></p>
+
+  # ===== LAYER 2 — BACKEND SERVER =====
+  - elementId: layer2-bg
+    elementType: shape
+    bounds: [60, 235, 700, 95]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 2, color: "$accent"}
+  - elementId: layer2-label
+    elementType: text
+    bounds: [70, 237, 180, 22]
+    content:
+      fontSize: 11
+      color: "$accent"
+      fontFamily: "Liter"
+      letterSpacing: 1
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>COUCHE SERVEUR</strong></p>
+  - elementId: layer2-box1
+    elementType: shape
+    bounds: [72, 262, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#4ADE8015"
+    border: {style: solid, width: 1, color: "$accent"}
+  - elementId: layer2-box1-text
+    elementType: text
+    bounds: [72, 262, 155, 55]
+    content:
+      fontSize: 14
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Hono HTTP</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Fast web server</span></p>
+  - elementId: layer2-box2
+    elementType: shape
+    bounds: [237, 262, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#4ADE8015"
+    border: {style: solid, width: 1, color: "$accent"}
+  - elementId: layer2-box2-text
+    elementType: text
+    bounds: [237, 262, 155, 55]
+    content:
+      fontSize: 14
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>tRPC Router</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Procedures + context</span></p>
+  - elementId: layer2-box3
+    elementType: shape
+    bounds: [402, 262, 155, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#7C3AED15"
+    border: {style: solid, width: 1, color: "#7C3AED"}
+  - elementId: layer2-box3-text
+    elementType: text
+    bounds: [402, 262, 155, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>RBAC Middleware</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Permission check</span></p>
+  - elementId: layer2-box4
+    elementType: shape
+    bounds: [567, 262, 180, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#4ADE8015"
+    border: {style: solid, width: 1, color: "$accent"}
+  - elementId: layer2-box4-text
+    elementType: text
+    bounds: [567, 262, 180, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Drizzle ORM</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Type-safe SQL builder</span></p>
+
+  # ===== ARROW 2: SERVER → DATABASE =====
+  - elementId: arrow2-line
+    elementType: shape
+    bounds: [390, 330, 0, 35]
+    shapeName: straightConnector1
+    arrow: ["arrow", null]
+    border: {style: solid, width: 2, color: "$accent"}
+  - elementId: arrow2-label-bg
+    elementType: shape
+    bounds: [420, 338, 140, 18]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$background"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: arrow2-label
+    elementType: text
+    bounds: [420, 338, 140, 18]
+    content:
+      fontSize: 10
+      color: "$accent"
+      fontFamily: "Liter"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p><strong>TCP / SQL queries</strong></p>
+
+  # ===== LAYER 3 — INFRASTRUCTURE =====
+  - elementId: layer3-bg
+    elementType: shape
+    bounds: [60, 365, 700, 95]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 2, color: "#F59E0B"}
+  - elementId: layer3-label
+    elementType: text
+    bounds: [70, 367, 220, 22]
+    content:
+      fontSize: 11
+      color: "#F59E0B"
+      fontFamily: "Liter"
+      letterSpacing: 1
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>COUCHE INFRASTRUCTURE</strong></p>
+  - elementId: layer3-box1
+    elementType: shape
+    bounds: [72, 392, 210, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#F59E0B10"
+    border: {style: solid, width: 1, color: "#F59E0B"}
+  - elementId: layer3-box1-text
+    elementType: text
+    bounds: [72, 392, 210, 55]
+    content:
+      fontSize: 14
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>MySQL 8</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Donnees metier relationnelles</span></p>
+  - elementId: layer3-box2
+    elementType: shape
+    bounds: [297, 392, 210, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#F59E0B10"
+    border: {style: solid, width: 1, color: "#F59E0B"}
+  - elementId: layer3-box2-text
+    elementType: text
+    bounds: [297, 392, 210, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Firebase Firestore</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Sync cloud + backup</span></p>
+  - elementId: layer3-box3
+    elementType: shape
+    bounds: [522, 392, 225, 55]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#7C3AED10"
+    border: {style: solid, width: 1, color: "#7C3AED"}
+  - elementId: layer3-box3-text
+    elementType: text
+    bounds: [522, 392, 225, 55]
+    content:
+      fontSize: 13
+      color: "$text"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Kimi OAuth 2.0</strong></p>
+        <p><span style="font-size:10px; color:$secondary;">Auth externe + JWT</span></p>
+
+  # ===== RIGHT PANEL — FLOW DETAILS =====
+  - elementId: right-title
+    elementType: text
+    bounds: [800, 105, 420, 22]
+    content:
+      fontSize: 12
+      color: "$primary"
+      fontFamily: "Liter"
+      letterSpacing: 1
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>3 FLOWS PRINCIPAUX</strong></p>
+  - elementId: right-line
+    elementType: shape
+    bounds: [800, 130, 420, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+
+  # Flow 1: API Request
+  - elementId: flow1-badge
+    elementType: shape
+    bounds: [800, 142, 90, 20]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: flow1-badge-text
+    elementType: text
+    bounds: [800, 142, 90, 20]
+    content:
+      fontSize: 10
+      color: "$white"
+      fontFamily: "Liter"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p><strong>FLOW API</strong></p>
+  - elementId: flow1-desc
+    elementType: text
+    bounds: [800, 166, 420, 60]
+    content:
+      fontSize: 12
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p><strong>Appel tRPC</strong> → Client serialise → Hono recoit → RBAC verifie → Drizzle SQL → MySQL retourne les donnees.</p>
+
+  # Flow 2: Authentication
+  - elementId: flow2-badge
+    elementType: shape
+    bounds: [800, 232, 90, 20]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#7C3AED"
+  - elementId: flow2-badge-text
+    elementType: text
+    bounds: [800, 232, 90, 20]
+    content:
+      fontSize: 10
+      color: "$white"
+      fontFamily: "Liter"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p><strong>FLOW AUTH</strong></p>
+  - elementId: flow2-desc
+    elementType: text
+    bounds: [800, 256, 420, 60]
+    content:
+      fontSize: 12
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Navigateur → <strong>Kimi OAuth</strong> → callback /api/auth/callback → JWT genere + cookie session → tRPC context extrait le role utilisateur.</p>
+
+  # Flow 3: Cloud Sync
+  - elementId: flow3-badge
+    elementType: shape
+    bounds: [800, 322, 100, 20]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#F59E0B"
+  - elementId: flow3-badge-text
+    elementType: text
+    bounds: [800, 322, 100, 20]
+    content:
+      fontSize: 10
+      color: "$white"
+      fontFamily: "Liter"
+      align: [center, middle]
+      wrap: false
+      text: |
+        <p><strong>FLOW SYNC</strong></p>
+  - elementId: flow3-desc
+    elementType: text
+    bounds: [800, 346, 420, 60]
+    content:
+      fontSize: 12
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Firebase SDK sync <strong>en arriere-plan</strong> localStorage vers Firestore. Operation <strong>bidirectionnelle</strong> et <strong>asynchrone</strong> — ne bloque pas l'API principale.</p>
+
+  # ===== BOTTOM — RELATIONS EXPLANATIONS =====
+  - elementId: bottom-title
+    elementType: text
+    bounds: [60, 480, 400, 22]
+    content:
+      fontSize: 12
+      color: "$accent"
+      fontFamily: "Liter"
+      letterSpacing: 1
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>RELATIONS ENTRE LES COUCHES</strong></p>
+  - elementId: bottom-line2
+    elementType: shape
+    bounds: [60, 505, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+
+  - elementId: rel1-box
+    elementType: shape
+    bounds: [60, 515, 370, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: rel1-accent
+    elementType: shape
+    bounds: [60, 515, 4, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: rel1-title
+    elementType: text
+    bounds: [76, 520, 340, 20]
+    content:
+      fontSize: 13
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>React ↔ tRPC Client</strong></p>
+  - elementId: rel1-text
+    elementType: text
+    bounds: [76, 542, 340, 80]
+    content:
+      fontSize: 11
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Les hooks React appellent les procedures tRPC comme des <strong>fonctions TypeScript locales</strong>. Le client gere automatiquement le cache, le dedup, le retry et l'invalidation des requêtes.</p>
+
+  - elementId: rel2-box
+    elementType: shape
+    bounds: [455, 515, 370, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: rel2-accent
+    elementType: shape
+    bounds: [455, 515, 4, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#7C3AED"
+  - elementId: rel2-title
+    elementType: text
+    bounds: [471, 520, 340, 20]
+    content:
+      fontSize: 13
+      color: "#7C3AED"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Router ↔ RBAC ↔ Drizzle</strong></p>
+  - elementId: rel2-text
+    elementType: text
+    bounds: [471, 542, 340, 80]
+    content:
+      fontSize: 11
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Chaque requête passe par la <strong>chaine middleware</strong> : authentification JWT → extraction du role → verification projectMembers → execution Drizzle. Le tout est <strong>type-safe de bout en bout</strong>.</p>
+
+  - elementId: rel3-box
+    elementType: shape
+    bounds: [850, 515, 370, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: rel3-accent
+    elementType: shape
+    bounds: [850, 515, 4, 115]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#F59E0B"
+  - elementId: rel3-title
+    elementType: text
+    bounds: [866, 520, 340, 20]
+    content:
+      fontSize: 13
+      color: "#F59E0B"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Firebase ↔ MySQL (complementarite)</strong></p>
+  - elementId: rel3-text
+    elementType: text
+    bounds: [866, 542, 340, 80]
+    content:
+      fontSize: 11
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>MySQL = <strong>source de verite</strong> pour les donnees metier. Firebase = <strong>couche de sync</strong> pour l'acces multi-appareils. Les deux sont independants — Firebase peut etre desactive sans impact.</p>
+
+  # ===== FOOTER =====
+  - elementId: bottom-line-footer
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "09"

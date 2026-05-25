@@ -1,0 +1,105 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 900, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Schema de Base de Donnees — 5 Tables Cles</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 85, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: schema-table
+    elementType: table
+    bounds: [60, 110, 1160, 520]
+    columnWidths: [0.18, 0.22, 0.60]
+    rowHeights: [0.1, 0.18, 0.18, 0.18, 0.18, 0.18]
+    style: "$default"
+    rows:
+      - - content:
+            text: |
+              <p><strong>Table</strong></p>
+        - content:
+            text: |
+              <p><strong>Cles</strong></p>
+        - content:
+            text: |
+              <p><strong>Description</strong></p>
+      - - content:
+            text: |
+              <p><strong>users</strong></p>
+        - content:
+            text: |
+              <p>id, unionId, role</p>
+        - content:
+            text: |
+              <p>Utilisateurs authentifies via Kimi OAuth. Role : commercial | directeur | admin. Stocke nom, email, avatar.</p>
+      - - content:
+            text: |
+              <p><strong>companies</strong></p>
+        - content:
+            text: |
+              <p>id, name, color</p>
+        - content:
+            text: |
+              <p>Entreprises clientes. Chaque entreprise a un nom, des notes, une couleur associee et un createur (FK vers users).</p>
+      - - content:
+            text: |
+              <p><strong>projects</strong></p>
+        - content:
+            text: |
+              <p>id, code, ownerId</p>
+        - content:
+            text: |
+              <p>Projets avec code AIM-XXXX. Chaque projet appartient a une entreprise et a un proprietaire (FK vers users). Status : active | won | lost | archived.</p>
+      - - content:
+            text: |
+              <p><strong>projectFiles</strong></p>
+        - content:
+            text: |
+              <p>id, projectId, stepId</p>
+        - content:
+            text: |
+              <p>Fichiers associes a un projet et a une etape du processus (ex: "chiffrage", "reception"). Stocke nom, type, taille, date.</p>
+      - - content:
+            text: |
+              <p><strong>projectMembers</strong></p>
+        - content:
+            text: |
+              <p>projectId, userId, permission</p>
+        - content:
+            text: |
+              <p><strong>Table cle pour le RBAC.</strong> Lien utilisateur-projet avec permission : owner (plein controle) | editor (modification) | viewer (lecture) | pending (en attente).</p>
+  - elementId: note
+    elementType: text
+    bounds: [60, 635, 1160, 22]
+    content:
+      fontSize: 13
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [left, middle]
+      text: |
+        <p>Toutes les tables utilisent des cles etrangeres (FK) avec contraintes ON DELETE. Relations : users 1-N projects (owner), users 1-N projectMembers, projects N-N users via projectMembers.</p>
+  - elementId: bottom-line
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "10"

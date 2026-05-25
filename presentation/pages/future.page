@@ -1,0 +1,262 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 900, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Perspectives d'Evolution</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 85, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: f1-bg
+    elementType: shape
+    bounds: [60, 115, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f1-icon
+    elementType: icon
+    bounds: [80, 130, 28, 28]
+    iconName: "fas:bell"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f1-title
+    elementType: text
+    bounds: [80, 168, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Notifications Temps Reel</strong></p>
+  - elementId: f1-desc
+    elementType: text
+    bounds: [80, 198, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Alertes pour demandes d'acces, modifications de documents, changements de statut de projet.</p>
+  - elementId: f2-bg
+    elementType: shape
+    bounds: [455, 115, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f2-icon
+    elementType: icon
+    bounds: [475, 130, 28, 28]
+    iconName: "fas:clock-rotate-left"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f2-title
+    elementType: text
+    bounds: [475, 168, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Historique des Modifications</strong></p>
+  - elementId: f2-desc
+    elementType: text
+    bounds: [475, 198, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Audit trail complet : qui a modifie quoi et quand. Restauration de versions precedentes.</p>
+  - elementId: f3-bg
+    elementType: shape
+    bounds: [850, 115, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f3-icon
+    elementType: icon
+    bounds: [870, 130, 28, 28]
+    iconName: "fas:magnifying-glass"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f3-title
+    elementType: text
+    bounds: [870, 168, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Recherche Full-Text</strong></p>
+  - elementId: f3-desc
+    elementType: text
+    bounds: [870, 198, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Recherche dans les noms de fichiers, notes de projets, et contenu des documents indexes.</p>
+  - elementId: f4-bg
+    elementType: shape
+    bounds: [60, 305, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f4-icon
+    elementType: icon
+    bounds: [80, 320, 28, 28]
+    iconName: "fas:file-pdf"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f4-title
+    elementType: text
+    bounds: [80, 358, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Export PDF par Projet</strong></p>
+  - elementId: f4-desc
+    elementType: text
+    bounds: [80, 388, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Rapports PDF automatiques par projet : offres, chiffrage, suivi.</p>
+  - elementId: f5-bg
+    elementType: shape
+    bounds: [455, 305, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f5-icon
+    elementType: icon
+    bounds: [475, 320, 28, 28]
+    iconName: "fas:signature"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f5-title
+    elementType: text
+    bounds: [475, 358, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Signature Electronique</strong></p>
+  - elementId: f5-desc
+    elementType: text
+    bounds: [475, 388, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>Integration avec DocuSign ou Signable pour la validation electronique des contrats.</p>
+  - elementId: f6-bg
+    elementType: shape
+    bounds: [850, 305, 370, 165]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: f6-icon
+    elementType: icon
+    bounds: [870, 320, 28, 28]
+    iconName: "fas:mobile-screen"
+    fill:
+      type: solid
+      color: "$accent"
+  - elementId: f6-title
+    elementType: text
+    bounds: [870, 358, 330, 26]
+    content:
+      fontSize: 17
+      color: "$text"
+      fontFamily: "Liter"
+      wrap: false
+      text: |
+        <p><strong>Application Mobile</strong></p>
+  - elementId: f6-desc
+    elementType: text
+    bounds: [870, 388, 330, 68]
+    content:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p>React Native avec code partage. Acces mobile pour les commerciaux sur le terrain.</p>
+  - elementId: highlight
+    elementType: shape
+    bounds: [60, 500, 1160, 70]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F10"
+    border: {style: solid, width: 1, color: "$primary"}
+  - elementId: highlight-text
+    elementType: text
+    bounds: [80, 510, 1120, 50]
+    content:
+      fontSize: 16
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Architecture deja prete</strong> — L'ajout de ces fonctionnalites ne necessite pas de refonte. Le systeme RBAC et l'API tRPC supportent toutes ces extensions naturellement.</p>
+  - elementId: bottom-line
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "16"

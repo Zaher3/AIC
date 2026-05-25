@@ -1,0 +1,156 @@
+pageType: content
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 900, 40]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>La Problematique du Service Commercial</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 85, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: card1-bg
+    elementType: shape
+    bounds: [60, 115, 560, 130]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: card1-icon
+    elementType: icon
+    bounds: [80, 130, 32, 32]
+    iconName: "fas:folder-open"
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: card1-text
+    elementType: text
+    bounds: [125, 125, 480, 105]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p><strong>Fragmentation documentaire</strong></p>
+        <p><span style="font-size:14px; color:$secondary;">Centaines de documents eparpilles : consultations, appels d'offres, devis, contrats. Aucun classement structure par entreprise ou par projet.</span></p>
+  - elementId: card2-bg
+    elementType: shape
+    bounds: [660, 115, 560, 130]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: card2-icon
+    elementType: icon
+    bounds: [680, 130, 32, 32]
+    iconName: "fas:users-slash"
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: card2-text
+    elementType: text
+    bounds: [725, 125, 480, 105]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p><strong>Travail en silos</strong></p>
+        <p><span style="font-size:14px; color:$secondary;">Les commerciaux gerent leurs dossiers individuellement sans visibilite pour les directeurs ni collaboration entre collegues.</span></p>
+  - elementId: card3-bg
+    elementType: shape
+    bounds: [60, 270, 560, 130]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: card3-icon
+    elementType: icon
+    bounds: [80, 285, 32, 32]
+    iconName: "fas:shield-halved"
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: card3-text
+    elementType: text
+    bounds: [125, 280, 480, 105]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p><strong>Absence de controle d'acces</strong></p>
+        <p><span style="font-size:14px; color:$secondary;">Pas de differenciation entre roles. Tout le monde voit tout ou rien. Impossible de donner un acces limite a un directeur.</span></p>
+  - elementId: card4-bg
+    elementType: shape
+    bounds: [660, 270, 560, 130]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$white"
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: card4-icon
+    elementType: icon
+    bounds: [680, 285, 32, 32]
+    iconName: "fas:triangle-exclamation"
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: card4-text
+    elementType: text
+    bounds: [725, 280, 480, 105]
+    content:
+      fontSize: 16
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.5
+      text: |
+        <p><strong>Risques operationnels</strong></p>
+        <p><span style="font-size:14px; color:$secondary;">Perte de documents, doublons, manque de tracabilite. Aucun historique des modifications ni suivi des versions.</span></p>
+  - elementId: highlight-box
+    elementType: shape
+    bounds: [60, 430, 1160, 80]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "#1E3A5F10"
+    border: {style: solid, width: 1, color: "$primary"}
+  - elementId: highlight-text
+    elementType: text
+    bounds: [80, 450, 1120, 40]
+    content:
+      fontSize: 18
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [center, middle]
+      text: |
+        <p><strong>Besoin critique :</strong> un outil centralise, securise et collaboratif pour organiser l'ensemble des documents du processus commercial</p>
+  - elementId: bottom-line
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "04"

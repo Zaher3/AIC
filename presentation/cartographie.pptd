@@ -1,0 +1,71 @@
+title: "Cartographie Interactive — Prototype & Architecture Technique"
+size: [1280, 720]
+theme:
+  colors:
+    primary: "#1E3A5F"
+    secondary: "#6B7280"
+    accent: "#4ADE80"
+    background: "#F8F9FA"
+    text: "#1F2937"
+    light: "#E5E7EB"
+    dark: "#0F172A"
+    white: "#FFFFFF"
+  textStyles:
+    title:
+      fontSize: 48
+      color: "$white"
+      fontFamily: "Liter"
+      letterSpacing: 1
+    subtitle:
+      fontSize: 22
+      color: "$secondary"
+      fontFamily: "Liter"
+    pageTitle:
+      fontSize: 28
+      color: "$primary"
+      fontFamily: "Liter"
+      letterSpacing: 0.5
+    body:
+      fontSize: 18
+      color: "$text"
+      fontFamily: "Liter"
+      lineHeight: 1.6
+    label:
+      fontSize: 14
+      color: "$secondary"
+      fontFamily: "Liter"
+    bigNumber:
+      fontSize: 52
+      color: "$primary"
+      fontFamily: "Liter"
+  tableStyles:
+    default:
+      fontSize: 16
+      fontFamily: "Liter"
+      headerFill: "$primary"
+      headerColor: "$white"
+      headerBold: true
+      bodyFill: ["$white", "$background"]
+      bodyColor: "$text"
+      border:
+        style: solid
+        width: 1
+        color: "$light"
+pages:
+  - pages/cover.page
+  - pages/toc.page
+  - pages/ch1.page
+  - pages/problem.page
+  - pages/solution.page
+  - pages/bench.page
+  - pages/ch2.page
+  - pages/stack.page
+  - pages/flow.page
+  - pages/schema.page
+  - pages/ch3.page
+  - pages/rbac.page
+  - pages/api.page
+  - pages/ch4.page
+  - pages/deploy.page
+  - pages/future.page
+  - pages/final.page

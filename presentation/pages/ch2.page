@@ -1,0 +1,42 @@
+pageType: chapter
+background:
+  type: solid
+  color: "$dark"
+elements:
+  - elementId: big-num
+    elementType: text
+    bounds: [60, 120, 300, 160]
+    opacity: 0.08
+    content:
+      fontSize: 140
+      color: "$white"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>02</strong></p>
+  - elementId: chapter-title
+    elementType: text
+    bounds: [60, 300, 700, 50]
+    content:
+      fontSize: 36
+      color: "$white"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Architecture Technique</strong></p>
+  - elementId: accent-line
+    elementType: shape
+    bounds: [60, 360, 120, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: chapter-desc
+    elementType: text
+    bounds: [60, 380, 700, 30]
+    content:
+      fontSize: 18
+      color: "$secondary"
+      fontFamily: "Liter"
+      text: |
+        <p>Stack technologique, schema de base de donnees et API type-safe</p>

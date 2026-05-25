@@ -1,0 +1,177 @@
+pageType: table_of_contents
+background:
+  type: solid
+  color: "$background"
+elements:
+  - elementId: page-title
+    elementType: text
+    bounds: [60, 40, 400, 45]
+    content:
+      style: "$pageTitle"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>SOMMAIRE</strong></p>
+  - elementId: title-line
+    elementType: shape
+    bounds: [60, 90, 100, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 3, color: "$accent"}
+  - elementId: num1
+    elementType: text
+    bounds: [60, 130, 70, 55]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [left, top]
+      wrap: false
+      text: |
+        <p><strong>01</strong></p>
+  - elementId: ch1-title
+    elementType: text
+    bounds: [130, 135, 460, 30]
+    content:
+      fontSize: 20
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Contexte &amp; Vision</strong></p>
+  - elementId: ch1-desc
+    elementType: text
+    bounds: [130, 168, 460, 22]
+    content:
+      style: "$label"
+      text: |
+        <p>Problematique, solution et fonctionnalites cles</p>
+  - elementId: num2
+    elementType: text
+    bounds: [60, 230, 70, 55]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [left, top]
+      wrap: false
+      text: |
+        <p><strong>02</strong></p>
+  - elementId: ch2-title
+    elementType: text
+    bounds: [130, 235, 460, 30]
+    content:
+      fontSize: 20
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Architecture Technique</strong></p>
+  - elementId: ch2-desc
+    elementType: text
+    bounds: [130, 268, 460, 22]
+    content:
+      style: "$label"
+      text: |
+        <p>Stack technologique, schema DB et API type-safe</p>
+  - elementId: num3
+    elementType: text
+    bounds: [60, 330, 70, 55]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [left, top]
+      wrap: false
+      text: |
+        <p><strong>03</strong></p>
+  - elementId: ch3-title
+    elementType: text
+    bounds: [130, 335, 460, 30]
+    content:
+      fontSize: 20
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Systeme de Permissions (RBAC)</strong></p>
+  - elementId: ch3-desc
+    elementType: text
+    bounds: [130, 368, 460, 22]
+    content:
+      style: "$label"
+      text: |
+        <p>Role-Based Access Control avec 3 niveaux hierarchiques</p>
+  - elementId: num4
+    elementType: text
+    bounds: [60, 430, 70, 55]
+    content:
+      fontSize: 36
+      color: "$primary"
+      fontFamily: "Liter"
+      align: [left, top]
+      wrap: false
+      text: |
+        <p><strong>04</strong></p>
+  - elementId: ch4-title
+    elementType: text
+    bounds: [130, 435, 460, 30]
+    content:
+      fontSize: 20
+      color: "$text"
+      fontFamily: "Liter"
+      align: [left, middle]
+      wrap: false
+      text: |
+        <p><strong>Deploiement &amp; Perspectives</strong></p>
+  - elementId: ch4-desc
+    elementType: text
+    bounds: [130, 468, 460, 22]
+    content:
+      style: "$label"
+      text: |
+        <p>Guide de mise en production et fonctionnalites futures</p>
+  - elementId: right-card
+    elementType: shape
+    bounds: [720, 130, 500, 360]
+    shapeName: rect
+    fill:
+      type: solid
+      color: "$primary"
+  - elementId: right-icon
+    elementType: icon
+    bounds: [940, 180, 60, 60]
+    iconName: "fas:map"
+    fill:
+      type: solid
+      color: "#FFFFFF30"
+  - elementId: right-text
+    elementType: text
+    bounds: [760, 270, 420, 100]
+    content:
+      fontSize: 18
+      color: "$white"
+      fontFamily: "Liter"
+      lineHeight: 1.6
+      align: [center, top]
+      text: |
+        <p><strong>14 etapes</strong> du processus commercial</p>
+        <p><strong>3 roles</strong> avec permissions granulaires</p>
+        <p><strong>5 tables</strong> dans la base de donnees</p>
+  - elementId: bottom-line
+    elementType: shape
+    bounds: [60, 660, 1160, 0]
+    shapeName: straightConnector1
+    border: {style: solid, width: 1, color: "$light"}
+  - elementId: page-num
+    elementType: text
+    bounds: [1150, 670, 70, 20]
+    content:
+      fontSize: 12
+      color: "$secondary"
+      fontFamily: "Liter"
+      align: [right, middle]
+      wrap: false
+      text: "02"
