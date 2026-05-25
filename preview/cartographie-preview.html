@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartographie Interactive — Preview</title>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1E3A5F;--accent:#4ADE80;--bg:#F8F9FA;--text:#1F2937;--light:#E5E7EB;--danger:#EF4444;--warning:#F59E0B}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;background:#fff;color:var(--text);min-height:100vh;line-height:1.5}
+header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid #f3f4f6}
+.header-inner{max-width:1100px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-logo{width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff}
+.header-title{font-size:13px;font-weight:700;color:#111827;letter-spacing:-.01em;line-height:1.2}
+.header-subtitle{font-size:11px;color:#9ca3af;line-height:1.2}
+.header-right{display:flex;align-items:center;gap:8px}
+.view-toggle{display:flex;align-items:center;background:#f3f4f6;border-radius:8px;padding:2px}
+.view-toggle button{display:flex;align-items:center;gap:4px;padding:6px 12px;font-size:12px;font-weight:500;border-radius:6px;border:none;cursor:pointer;color:#9ca3af;background:transparent;transition:all .2s}
+.view-toggle button.active{background:#fff;color:#111827;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.role-badge{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500}
+.role-directeur{color:#7c3aed;background:#ede9fe}
+.role-responsable{color:#2563eb;background:#dbeafe}
+.role-commercial{color:#059669;background:#d1fae5}
+main{max-width:1100px;margin:0 auto;padding:24px}
+.section-title{text-align:center;max-width:600px;margin:0 auto 24px}
+.section-title h2{font-size:24px;font-weight:700;color:#111827;margin-bottom:6px}
+.section-title p{font-size:13px;color:#9ca3af}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:20px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:12px;color:#6b7280}
+.legend-box{width:14px;height:14px;border-radius:3px}
+
+/* Flowchart */
+.flowchart{display:flex;flex-direction:column;align-items:center;position:relative;padding:24px 0}
+.flowchart::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:#f3f4f6;transform:translateX(-50%);z-index:0}
+.flow-node-wrap{display:flex;flex-direction:column;align-items:center;position:relative;width:100%}
+.step-badge{position:absolute;left:calc(50% - 200px);top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#e5e7eb;color:#6b7280;transition:all .3s;z-index:10}
+.step-badge.active{background:var(--accent);color:#111827}
+.flow-node{position:relative;padding:14px 28px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;transition:all .3s;border-radius:12px;border:1.5px solid #e5e7eb;background:#fff;min-width:280px;max-width:360px;line-height:1.4;z-index:5}
+.flow-node:hover{background:#f9fafb;border-color:#d1d5db;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.flow-node.active{background:#111827;color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,222,128,.3),0 4px 16px rgba(0,0,0,.15)}
+.flow-node.start{background:var(--primary);color:#fff;border-color:var(--primary)}
+.flow-node.start:hover{background:#152D4A}
+.flow-node.start.active{background:#111827;border-color:var(--accent)}
+.flow-node.decision{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.flow-node.decision:hover{background:#fee2e2;border-color:#fca5a5}
+.flow-node.decision.active{background:#111827;color:#fff;border-color:var(--accent)}
+.flow-node.parallel{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+.flow-node.parallel:hover{background:#dbeafe}
+.flow-node.parallel.active{background:#111827;color:#fff;border-color:var(--accent)}
+.flow-node.end{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+.flow-node.end:hover{background:#dcfce7}
+.flow-node.end.active{background:#111827;color:#fff;border-color:var(--accent)}
+.flow-node .node-inner{display:flex;align-items:center;gap:8px;justify-content:center}
+.flow-node .node-inner svg{flex-shrink:0}
+.connector{height:24px;width:2px;background:#e5e7eb;margin:2px auto;position:relative;z-index:1;transition:all .3s}
+.connector.active{background:var(--accent)}
+.branches{display:flex;justify-content:center;gap:24px;margin:8px 0}
+.branch-label{font-size:11px;font-weight:500;padding:3px 12px;border-radius:999px}
+.parallel-wrap{display:flex;justify-content:center;gap:20px;margin:8px 0;position:relative}
+.parallel-wrap::before{content:'';position:absolute;top:50%;left:25%;right:25%;height:2px;background:#e5e7eb;transform:translateY(-50%)}
+.refusal-split{position:relative;width:100%}
+.refusal-label{font-size:11px;color:#ef4444;font-weight:600;margin-bottom:4px}
+.refusal-branch{display:flex;flex-direction:column;align-items:flex-end;position:absolute;top:0;right:40px;width:200px}
+
+/* Detail Panel */
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.2);backdrop-filter:blur(4px);z-index:40}
+.detail-panel{position:fixed;right:0;top:0;height:100%;width:100%;max-width:420px;background:#fff;border-left:1px solid #e5e7eb;z-index:50;overflow-y:auto;box-shadow:-8px 0 32px rgba(0,0,0,.1);animation:slideIn .3s ease}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.panel-header{position:sticky;top:0;background:#fff;z-index:10;border-bottom:1px solid #f3f4f6;padding:16px 24px}
+.panel-close{position:absolute;top:12px;right:12px;padding:6px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#9ca3af;transition:all .2s}
+.panel-close:hover{background:#f3f4f6;color:#374151}
+.panel-badges{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.badge-step{font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px}
+.badge-type{font-size:11px;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.panel-folder{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:#b45309;background:#fef3c7;border:1px solid #fde68a;padding:3px 10px;border-radius:999px;margin-top:6px}
+.panel-title{font-size:17px;font-weight:600;color:#111827;padding-right:32px}
+.panel-body{padding:20px 24px;space-y:20px}
+.panel-section{margin-bottom:20px}
+.panel-section h3{font-size:12px;font-weight:600;color:#111827;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.panel-section h3 svg{color:#9ca3af;width:14px;height:14px}
+.panel-desc{font-size:13px;color:#6b7280;line-height:1.7}
+.action-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.action-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#374151;line-height:1.5}
+.action-num{width:20px;height:20px;border-radius:50%;background:#dcfce7;color:#15803d;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.doc-types{display:flex;flex-wrap:wrap;gap:6px}
+.doc-tag{font-size:11px;padding:5px 10px;border-radius:6px;background:#eff6ff;color:#1d4ed8;border:1px solid #dbeafe;font-weight:500}
+
+/* Explorer */
+.explorer-header{text-align:center;max-width:600px;margin:0 auto 24px}
+.explorer-header h2{font-size:24px;font-weight:700;color:#111827;margin-bottom:6px}
+.explorer-header p{font-size:13px;color:#9ca3af}
+.role-info{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.role-info span{font-size:11px;padding:4px 10px;border-radius:999px}
+.role-info .scope{font-size:11px;color:#9ca3af;background:#f3f4f6}
+.breadcrumb{display:flex;align-items:center;gap:4px;margin-bottom:16px;font-size:13px;flex-wrap:wrap}
+.breadcrumb button{padding:4px 8px;border-radius:6px;border:none;background:transparent;cursor:pointer;color:#9ca3af;transition:all .2s;font-size:13px}
+.breadcrumb button:hover{color:#374151;background:#f9fafb}
+.breadcrumb button.active{background:#f3f4f6;color:#111827;font-weight:600}
+.breadcrumb-sep{color:#e5e7eb}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;cursor:pointer;transition:all .2s}
+.card:hover{border-color:#d1d5db;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-title{font-size:14px;font-weight:600;color:#111827}
+.card-subtitle{font-size:12px;color:#9ca3af;margin-top:2px}
+.card-meta{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:11px;color:#9ca3af}
+.card-actions{display:flex;gap:6px;margin-top:10px}
+.btn-sm{padding:5px 10px;font-size:11px;font-weight:500;border-radius:6px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;transition:all .2s;color:#6b7280}
+.btn-sm:hover{background:#f9fafb}
+.btn-sm.danger:hover{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.btn-primary{padding:8px 16px;font-size:12px;font-weight:500;border-radius:8px;border:none;background:var(--primary);color:#fff;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:#152D4A}
+.btn-secondary{padding:8px 16px;font-size:12px;font-weight:500;border-radius:8px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;transition:all .2s;color:#374151}
+.btn-secondary:hover{background:#f9fafb}
+.add-card{border:2px dashed #e5e7eb;border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all .2s;color:#9ca3af;font-size:13px;font-weight:500;background:transparent}
+.add-card:hover{border-color:#d1d5db;color:#6b7280;background:#f9fafb}
+
+/* Step folder grid */
+.step-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.step-folder{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.step-folder:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.step-folder-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.step-folder-icon{width:28px;height:28px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;color:#166534}
+.step-folder-title{font-size:12px;font-weight:600;color:#111827}
+.step-folder-desc{font-size:11px;color:#9ca3af;line-height:1.4}
+.step-folder-files{font-size:11px;color:var(--accent);font-weight:500;margin-top:6px}
+
+/* File list */
+.file-drop-zone{border:2px dashed #e5e7eb;border-radius:12px;padding:24px;text-align:center;margin-bottom:16px;transition:all .2s;background:#fafafa}
+.file-drop-zone.dragover{border-color:var(--accent);background:#f0fdf4}
+.file-drop-zone p{font-size:12px;color:#9ca3af}
+.file-list{display:flex;flex-direction:column;gap:6px}
+.file-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border:1px solid #f3f4f6;border-radius:8px;transition:all .2s}
+.file-item:hover{border-color:#e5e7eb}
+.file-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.file-icon.pdf{background:#fef2f2;color:#dc2626}
+.file-icon.doc{background:#eff6ff;color:#2563eb}
+.file-icon.xls{background:#f0fdf4;color:#16a34a}
+.file-icon.img{background:#fef3c7;color:#d97706}
+.file-icon.other{background:#f3f4f6;color:#6b7280}
+.file-name{font-size:12px;font-weight:500;color:#374151;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-meta{font-size:11px;color:#9ca3af;flex-shrink:0}
+.file-delete{padding:4px;border-radius:6px;border:none;background:transparent;cursor:pointer;color:#d1d5db;transition:all .2s}
+.file-delete:hover{background:#fef2f2;color:#dc2626}
+.empty-state{text-align:center;padding:40px;color:#d1d5db}
+.empty-state svg{margin:0 auto 8px}
+.empty-state p{font-size:13px}
+
+/* Team Org Chart */
+.org-chart{display:flex;flex-direction:column;align-items:center;gap:0;padding:20px 0}
+.org-row{display:flex;justify-content:center;gap:40px;align-items:flex-start}
+.org-node{text-align:center;padding:12px 20px;border-radius:10px;font-size:12px;font-weight:600;min-width:140px;position:relative}
+.org-directeur{background:#dc2626;color:#fff}
+.org-responsable{background:#7c3aed;color:#fff}
+.org-membre{background:#f3f4f6;color:#374151;border:1px solid #e5e7eb}
+.org-label{font-size:10px;color:#9ca3af;margin-top:2px;font-weight:400}
+.org-connector{height:20px;width:2px;background:#e5e7eb;margin:0 auto}
+.org-connector-h{height:2px;background:#e5e7eb;margin:0 auto}
+.org-branch{display:flex;justify-content:center;gap:60px;position:relative}
+.org-branch::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;background:#e5e7eb}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:60;display:flex;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:16px}
+.modal input,.modal textarea{width:100%;padding:10px 14px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;margin-bottom:10px;font-family:inherit;transition:all .2s}
+.modal input:focus,.modal textarea:focus{outline:none;border-color:var(--primary)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn .4s ease forwards}
+.opacity-0{opacity:0}
+.hidden{display:none !important}
+footer{border-top:1px solid #f3f4f6;background:#f9fafb;margin-top:auto}
+.footer-inner{max-width:1100px;margin:0 auto;padding:16px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:#9ca3af}
+.team-section{background:#f9fafb;border-radius:12px;padding:20px;margin-bottom:20px}
+.team-title{font-size:14px;font-weight:600;color:#111827;margin-bottom:16px;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-inner">
+<div class="header-left">
+<div class="header-logo"><i data-lucide="map" style="width:18px;height:18px"></i></div>
+<div>
+<div class="header-title">Cartographie Interactive</div>
+<div class="header-subtitle">Consultation et Appel d'Offres</div>
+</div>
+</div>
+<div class="header-right">
+<div class="view-toggle">
+<button id="btn-explorer" onclick="setView('explorer')" class="active"><i data-lucide="folder-tree" style="width:14px;height:14px"></i><span>Explorateur</span></button>
+<button id="btn-flowchart" onclick="setView('flowchart')"><i data-lucide="map" style="width:14px;height:14px"></i><span>Processus</span></button>
+</div>
+<div class="role-badge role-directeur" id="role-badge"><i data-lucide="shield" style="width:12px;height:12px"></i><span id="role-text">Directeur</span></div>
+</div>
+</div>
+</header>
+
+<main>
+
+<!-- ===== EXPLORER VIEW ===== -->
+<div id="view-explorer">
+<div class="explorer-header">
+<h2>Explorateur de Dossiers</h2>
+<p>Gerez vos entreprises, projets et documents organises par etape du processus commercial.</p>
+<div class="role-info">
+<span class="role-badge role-directeur"><i data-lucide="shield" style="width:10px;height:10px"></i>Vous etes: Directeur</span>
+<span class="scope">Visualisation: Toutes les equipes</span>
+</div>
+</div>
+
+<!-- TEAM ORG CHART -->
+<div class="team-section">
+<div class="team-title">Organisation du Service Commercial</div>
+<div class="org-chart">
+<div class="org-node org-directeur">Directeur Commercial</div>
+<div class="org-connector"></div>
+<div class="org-branch" style="gap:80px">
+<div style="text-align:center">
+<div class="org-connector"></div>
+<div class="org-node org-responsable">Responsable Equipe 1</div>
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;align-items:center">
+<div class="org-node org-membre" style="min-width:100px;padding:8px 14px">Commercial A</div>
+<div class="org-node org-membre" style="min-width:100px;padding:8px 14px">Commercial B</div>
+</div>
+</div>
+<div style="text-align:center">
+<div class="org-connector"></div>
+<div class="org-node org-responsable">Responsable Equipe 2</div>
+<div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;align-items:center">
+<div class="org-node org-membre" style="min-width:100px;padding:8px 14px">Commercial C</div>
+<div class="org-node org-membre" style="min-width:100px;padding:8px 14px">Commercial D</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb" id="breadcrumb"></div>
+
+<!-- Content Area -->
+<div id="explorer-content"></div>
+</div>
+
+<!-- ===== FLOWCHART VIEW ===== -->
+<div id="view-flowchart" class="hidden">
+<div class="section-title">
+<h2>Processus Commercial et de Chiffrage</h2>
+<p>Vue d'ensemble du processus. Cliquez sur une etape pour les details.</p>
+</div>
+<div class="legend">
+<div class="legend-item"><div class="legend-box" style="background:#1E3A5F"></div>Debut</div>
+<div class="legend-item"><div class="legend-box" style="background:#fff;border:1px solid #d1d5db"></div>Etape</div>
+<div class="legend-item"><div class="legend-box" style="background:#fef2f2;border:1px solid #fecaca"></div>Decision</div>
+<div class="legend-item"><div class="legend-box" style="background:#eff6ff;border:1px solid #bfdbfe"></div>Parallele</div>
+<div class="legend-item"><div class="legend-box" style="background:#f0fdf4;border:1px solid #bbf7d0"></div>Fin</div>
+</div>
+<div class="flowchart" id="flowchart"></div>
+</div>
+
+</main>
+
+<!-- Detail Panel -->
+<div id="detail-panel" class="hidden">
+<div class="panel-overlay" onclick="closePanel()"></div>
+<div class="detail-panel" id="panel-content"></div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="hidden">
+<div class="modal-overlay" onclick="closeModal()">
+<div class="modal" onclick="event.stopPropagation()">
+<h3 id="modal-title">Ajouter</h3>
+<div id="modal-body"></div>
+<div class="modal-actions">
+<button class="btn-secondary" onclick="closeModal()">Annuler</button>
+<button class="btn-primary" id="modal-confirm" onclick="confirmModal()">Ajouter</button>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="footer-inner">
+<p>Cartographie Interactive — Service Commercial & Estimation des Couts</p>
+<div style="display:flex;gap:16px">
+<span id="stat-companies">3 entreprises</span>
+<span id="stat-projects">5 projets</span>
+<span id="stat-files">12 fichiers</span>
+</div>
+</div>
+</footer>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const flowNodes = [
+{id:'reception',step:1,title:"Reception d'offre",type:'start',folderName:'01 - DOSSIER CONSULTATIONS',description:"Point de depart du processus commercial. Reception formelle de la demande d'offre du client potentiel (consultation ou appel d'offres). Cette etape declenche l'ensemble de la procedure de chiffrage et de reponse commerciale.",details:['Enregistrer la date de reception','Identifier le client et le contact','Noter la date limite de reponse','Verifier la completude du dossier recu'],documentTypes:["Consultation","Appel d'offres",'Dossier technique','Cahier des charges'],icon:'inbox'},
+{id:'preetude',step:2,title:"Pre-etude",type:'decision',folderName:'02 - DOSSIER ETUDE',description:"Analyse preliminaire de la faisabilite et de la pertinence de l'offre. Evaluation des capacites techniques, financieres et temporelles. Decision d'aller de l'avant ou de decliner l'opportunite.",details:['Analyse rapide du perimetre','Verification des competences disponibles','Estimation preliminaire des delais','Evaluation de la rentabilite potentielle'],documentTypes:['Note de faisabilite','Grille d\'evaluation'],branches:[{label:'Faisable',color:'#4ADE80'},{label:'Decliner',color:'#EF4444'}],icon:'search'},
+{id:'scop',step:3,title:'Definition du SCOP',type:'step',folderName:'02 - DOSSIER ETUDE',description:'Definition du perimetre du projet (Scope). Etablissement clair des livrables, des limites du projet, des exclusions et des criteres d\'acceptation. Le SCOP formalise ce qui est inclus et exclu du contrat.',details:['Definir les livrables attendus','Lister les inclusions et exclusions','Fixer les criteres d\'acceptation','Valider le perimetre avec le client'],documentTypes:['Document de perimetre (SCOP)','Matrice d\'exclusions'],icon:'file-text'},
+{id:'takeoff',step:4,title:'Metro TakeOff',type:'step',folderName:'02 - DOSSIER ETUDE',description:"Phase de quantification et de mesure des travaux. Le 'TakeOff' consiste a extraire les quantites de materiaux, de main-d'oeuvre et d'equipements necessaires a partir des plans et documents techniques. C'est la base du chiffrage.",details:['Extraire les quantites des plans','Mesurer les surfaces et volumes','Identifier les equipements necessaires','Quantifier la main-d\'oeuvre requise'],documentTypes:['Metre quantitatif','Plans et extraits','Devis descriptif'],icon:'ruler'},
+{id:'exigences',step:5,title:'Etude des exigences',type:'step',folderName:'02 - DOSSIER ETUDE',description:'Analyse approfondie des specifications techniques, normes, reglementations et exigences particulieres du client. Identification des contraintes et des risques associes au projet.',details:['Analyser les specifications techniques','Identifier les normes applicables','Relever les contraintes reglementaires','Evaluer les risques projet'],documentTypes:['Specifications techniques','Analyse des risques','Registre des exigences'],icon:'clipboard-list'},
+{id:'montage',step:6,title:'Montage / Fabrication',type:'parallel',folderName:'05 - DOSSIER CORRESPONDANT',description:'Preparation technique parallele : Montage et assemblage des elements sur site, et fabrication des composants sur mesure en atelier. Coordination avec les equipes de production.',details:['Planifier les operations de montage','Preparer les kits de fabrication','Coordonner avec la production','Valider les procedures de controle qualite'],documentTypes:['Plan de montage','Fiches de fabrication','Procedures qualite'],icon:'settings'},
+{id:'fournisseur',step:6,title:'Fournisseur / Sous-traitants',type:'parallel',folderName:'05 - DOSSIER CORRESPONDANT',description:'Processus de sourcing et contractualisation en parallele : selection et negociation avec les fournisseurs de materiaux, identification et contractualisation des sous-traitants specialises.',details:['Selectionner les fournisseurs potentiels','Demander des devis comparatifs','Negocier les prix et delais','Etablir les bons de commande'],documentTypes:['Devis fournisseurs','Contrats sous-traitance','Bons de commande'],icon:'truck'},
+{id:'chiffrage',step:7,title:'Chiffrage',type:'step',folderName:'02 - DOSSIER ETUDE',description:'Elaboration du cout total du projet. Integration des couts de materiaux, main-d\'oeuvre, equipements, sous-traitance, frais generaux et marge beneficiaire. Le chiffrage doit etre precis et competitif tout en garantissant la rentabilite.',details:['Consolider les couts materiaux','Calculer la main-d\'oeuvre','Integrer les couts sous-traitance','Ajouter les frais generaux et la marge'],documentTypes:['Fichier de chiffrage','Grille de prix','Analyse de rentabilite'],icon:'calculator'},
+{id:'preparation-offre',step:8,title:"Preparation d'offre",type:'step',folderName:'05 - DOSSIER CORRESPONDANT',description:"Redaction du document d'offre complet comprenant la partie technique (description de la solution, planning, methodologie, equipe) et la partie commerciale (prix detaille, conditions de paiement, garanties).",details:['Rediger la partie technique','Preparer le detail des prix','Definir les conditions commerciales','Assembler le document final'],documentTypes:['Offre technique','Offre commerciale','Planning de realisation'],icon:'file-edit'},
+{id:'negociation',step:9,title:'Suivi et Negociation',type:'decision',folderName:'05 - DOSSIER CORRESPONDANT',description:"Phase de suivi de l'offre aupres du client. Relances regulieres pour obtenir un retour. Negociation sur les prix, delais et conditions si necessaire. C'est un moment cle pour convertir l'opportunite en contrat.",details:['Relancer le client regulierement','Repondre aux questions techniques','Negocier si demande','Obtenir une decision formelle'],documentTypes:['Comptes-rendus de relance','Protocole de negociation'],branches:[{label:'Acceptee',color:'#4ADE80'},{label:'Refusee',color:'#EF4444'}],icon:'handshake'},
+{id:'verification',step:10,title:'Verification commande/contrat',type:'step',folderName:'01 - DOSSIER CONSULTATIONS',description:"Verification rigoureuse de la commande ou du contrat signe par rapport a l'offre soumise. Controle de la conformite des termes, des prix, des delais et des specifications. Identification des ecarts eventuels a traiter avant demarrage.",details:['Comparer commande vs offre','Verifier les prix et quantites','Controler les delais','Signaler les ecarts eventuels'],documentTypes:['Contrat signe','Grille de conformite','Note d\'ecarts'],icon:'check-circle'},
+{id:'harmonisation',step:11,title:"Reunion d'harmonisation",type:'step',folderName:'05 - DOSSIER CORRESPONDANT',description:"Reunion de coordination avec le client pour aligner les aspects techniques. Validation des plans finaux, confirmation des choix techniques, clarification des points d'interface. Cette etape assure que toutes les parties partagent la meme vision du projet.",details:["Preparer l'ordre du jour",'Valider les plans definitifs','Confirmer les choix techniques','Rediger le compte-rendu'],documentTypes:["Ordre du jour","Compte-rendu de reunion",'Plans valides'],icon:'users'},
+{id:'passation',step:12,title:'Reunion de passation',type:'step',folderName:'05 - DOSSIER CORRESPONDANT',description:"Reunion officielle de transfert du projet de l'equipe commerciale vers l'equipe de realisation (passation de consignes). Transmission de toute la documentation, des engagements pris et des points de vigilance.",details:["Preparer le dossier de passation","Presenter l'equipe de realisation","Transmettre les consignes",'Formaliser le transfert'],documentTypes:['Dossier de passation','Compte-rendu','Liste de diffusion'],icon:'arrow-right-circle'},
+{id:'execution',step:13,title:'Suivi Execution',type:'step',folderName:'01 - DOSSIER CONSULTATIONS',description:"Suivi de la realisation du projet en cours. Controle des avancements, gestion des modifications eventuelles, coordination entre les differentes parties prenantes. La phase d'execution requiert une communication reguliere avec le client.",details:['Suivre les avancements','Gerer les modifications','Coordonner les intervenants','Communiquer avec le client'],documentTypes:['Rapports de suivi','PV de chantier','Modifications'],icon:'bar-chart-3'},
+{id:'bilan',step:14,title:"Bilan d'affaire",type:'end',folderName:'01 - DOSSIER CONSULTATIONS',description:"Evaluation finale de l'affaire apres completion. Analyse des resultats financiers, collecte des retours d'experience, mise a jour des referentiels. Le bilan alimente l'amelioration continue du processus commercial et du referentiel de prix.",details:["Analyser les resultats financiers",'Collecter les retours experience','Mettre a jour les referentiels','Capitaliser pour les futurs projets'],documentTypes:["Bilan d'affaire",'Retour experience','Referentiel prix'],icon:'trending-up'}
+];
+
+const typeLabels={start:'Debut',step:'Etape',decision:'Decision',parallel:'Processus parallele',end:'Fin'};
+const typeColors={start:'bg-[#1E3A5F] text-white',decision:'bg-red-50 text-red-700 border-red-200',parallel:'bg-blue-50 text-blue-700 border-blue-200',end:'bg-green-50 text-green-700 border-green-200',step:'bg-gray-100 text-gray-700 border-gray-200'};
+
+const iconMap={inbox:'file-input',search:'search','file-text':'file-text',ruler:'ruler','clipboard-list':'clipboard-list',settings:'settings',truck:'truck',calculator:'calculator','file-edit':'file-edit',handshake:'handshake','check-circle':'check-circle',users:'users','arrow-right-circle':'arrow-right-circle','bar-chart-3':'bar-chart-3','trending-up':'trending-up'};
+
+// Demo Data
+let companies=JSON.parse(localStorage.getItem('demo_companies')||'null')||[
+{id:1,name:'Societe ABC Construct',notes:'Client majeur - BTP',color:'#1E3A5F'},
+{id:2,name:'Industries XYZ',notes:'Secteur industriel',color:'#7C3AED'},
+{id:3,name:'Municipalite de Villefranche',notes:'Marche public',color:'#059669'}
+];
+let projects=JSON.parse(localStorage.getItem('demo_projects')||'null')||[
+{id:1,code:'AIM-2025-001',name:'Extension batiment A',companyId:1,status:'active',notes:'Chiffrage en cours'},
+{id:2,code:'AIM-2025-002',name:'Renovation facade',companyId:1,status:'won',notes:'Contrat signe'},
+{id:3,code:'AIM-2025-003',name:'Installation equipements',companyId:2,status:'active',notes:'Negociation en cours'},
+{id:4,code:'AIM-2025-004',name:'Amenagement salle des fetes',companyId:3,status:'active',notes:'Etude des exigences'},
+{id:5,code:'AIM-2025-005',name:'Parking souterrain',companyId:3,status:'lost',notes:'Refuse - budget'}
+];
+let files=JSON.parse(localStorage.getItem('demo_files')||'null')||[
+{id:1,projectId:1,stepId:'reception',name:'Consultation_ABC_2025.pdf',type:'pdf',size:'2.4 MB',date:'2025-01-15'},
+{id:2,projectId:1,stepId:'preetude',name:'Note_faisabilite.docx',type:'doc',size:'156 KB',date:'2025-01-18'},
+{id:3,projectId:1,stepId:'scop',name:'SCOP_Extension.xlsx',type:'xls',size:'89 KB',date:'2025-01-22'},
+{id:4,projectId:2,stepId:'reception',name:'AO_Renovation.pdf',type:'pdf',size:'4.1 MB',date:'2024-12-10'},
+{id:5,projectId:2,stepId:'bilan',name:'Bilan_affaire_2025.pdf',type:'pdf',size:'1.8 MB',date:'2025-03-01'},
+{id:6,projectId:3,stepId:'chiffrage',name:'Chiffrage_equipements.xlsx',type:'xls',size:'245 KB',date:'2025-02-05'},
+{id:7,projectId:4,stepId:'exigences',name:'Cahier_des_charges.pdf',type:'pdf',size:'5.2 MB',date:'2025-02-20'},
+{id:8,projectId:1,stepId:'takeoff',name:'Metre_quantitatif.xlsx',type:'xls',size:'178 KB',date:'2025-01-25'},
+{id:9,projectId:1,stepId:'preparation-offre',name:'Offre_technique.pdf',type:'pdf',size:'3.6 MB',date:'2025-02-10'},
+{id:10,projectId:3,stepId:'negociation',name:'CR_Negociation.docx',type:'doc',size:'45 KB',date:'2025-02-28'},
+{id:11,projectId:4,stepId:'harmonisation',name:'Plans_valides.pdf',type:'pdf',size:'8.1 MB',date:'2025-03-05'},
+{id:12,projectId:1,stepId:'fournisseur',name:'Devis_fournisseurs.xlsx',type:'xls',size:'312 KB',date:'2025-02-01'}
+];
+
+let viewMode='explorer';
+let explorerLevel='companies';
+let selectedCompany=null;
+let selectedProject=null;
+let selectedStep=null;
+let activeNodeId=null;
+let modalCallback=null;
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+function setView(mode){
+viewMode=mode;
+document.getElementById('btn-explorer').classList.toggle('active',mode==='explorer');
+document.getElementById('btn-flowchart').classList.toggle('active',mode==='flowchart');
+document.getElementById('view-explorer').classList.toggle('hidden',mode!=='explorer');
+document.getElementById('view-flowchart').classList.toggle('hidden',mode!=='flowchart');
+if(mode==='flowchart')renderFlowchart();
+else renderExplorer();
+}
+
+// ============================================================
+// FLOWCHART
+// ============================================================
+function renderFlowchart(){
+const container=document.getElementById('flowchart');
+let html='';
+let skipParallel=false;
+flowNodes.forEach((node,i)=>{
+if(node.type==='parallel'){
+if(skipParallel)return;
+skipParallel=true;
+const parallels=flowNodes.filter(n=>n.type==='parallel');
+html+=`<div class="flow-node-wrap">`;
+html+=`<div class="step-badge ${activeNodeId&&parallels.some(p=>p.id===activeNodeId)?'active':''}">${node.step}</div>`;
+html+=`<div class="parallel-wrap">`;
+parallels.forEach(p=>{
+const pa=activeNodeId===p.id;
+const PI=iconMap[p.icon]||'circle';
+html+=`<div class="flow-node parallel${pa?' active':''}" onclick="openNodeDetail('${p.id}')" style="min-width:200px;max-width:240px;font-size:11px;padding:10px 16px">`;
+html+=`<div class="node-inner"><i data-lucide="${PI}" style="width:14px;height:14px"></i><span>${p.title}</span></div>`;
+html+=`</div>`;
+});
+html+=`</div>`;
+const chIdx=flowNodes.findIndex(n=>n.id==='chiffrage');
+if(chIdx>i){
+html+=`<div class="connector ${activeNodeId&&flowNodes.findIndex(n=>n.id===activeNodeId)>i?'active':''}"></div>`;
+}
+html+=`</div>`;
+return;
+}
+if(node.type==='branch')return;
+const isActive=activeNodeId===node.id;
+const Icon=iconMap[node.icon]||'circle';
+html+=`<div class="flow-node-wrap">`;
+html+=`<div class="step-badge ${isActive?'active':''}">${node.step}</div>`;
+html+=`<div class="flow-node ${node.type}${isActive?' active':''}" onclick="openNodeDetail('${node.id}')">`;
+html+=`<div class="node-inner"><i data-lucide="${Icon}" style="width:16px;height:16px"></i><span>${node.title}</span></div>`;
+html+=`</div>`;
+if(i<flowNodes.length-1){
+const next=flowNodes.slice(i+1).find(n=>n.type!=='branch');
+if(next){
+html+=`<div class="connector ${activeNodeId&&flowNodes.findIndex(n=>n.id===activeNodeId)>i?'active':''}"></div>`;
+}
+}
+if(node.branches){
+html+=`<div class="branches">`;
+node.branches.forEach(b=>{
+html+=`<span class="branch-label" style="background:${b.color}20;color:${b.color};border:1px solid ${b.color}40">${b.label}</span>`;
+});
+html+=`</div>`;
+const nextNonBranch=flowNodes.slice(i+1).find(n=>n.type!=='branch');
+if(nextNonBranch){
+html+=`<div class="connector ${activeNodeId&&flowNodes.findIndex(n=>n.id===activeNodeId)>i?'active':''}"></div>`;
+}
+}
+html+=`</div>`;
+});
+container.innerHTML=html;
+lucide.createIcons();
+}
+
+function openNodeDetail(nodeId){
+activeNodeId=nodeId;
+const node=flowNodes.find(n=>n.id===nodeId);
+if(!node)return;
+const typeLabel=typeLabels[node.type]||node.type;
+const badgeColor=typeColors[node.type]||typeColors.step;
+const Icon=iconMap[node.icon]||'circle';
+let html=`<div class="panel-header">`;
+html+=`<button class="panel-close" onclick="closePanel()"><i data-lucide="x" style="width:18px;height:18px"></i></button>`;
+html+=`<div class="panel-badges">`;
+html+=`<span class="badge-step ${badgeColor}">Etape ${node.step}</span>`;
+html+=`<span class="badge-type">${typeLabel}</span>`;
+html+=`</div>`;
+html+=`<div class="panel-title">${node.title}</div>`;
+html+=`<div class="panel-folder"><i data-lucide="folder-open" style="width:12px;height:12px"></i> ${node.folderName}</div>`;
+html+=`</div>`;
+html+=`<div class="panel-body">`;
+html+=`<div class="panel-section">`;
+html+=`<h3><i data-lucide="folder-open"></i> Description</h3>`;
+html+=`<p class="panel-desc">${node.description}</p>`;
+html+=`</div>`;
+if(node.details&&node.details.length>0){
+html+=`<div class="panel-section">`;
+html+=`<h3><i data-lucide="chevron-right"></i> Actions a realiser</h3>`;
+html+=`<ul class="action-list">`;
+node.details.forEach((d,idx)=>{
+html+=`<li><span class="action-num">${idx+1}</span><span>${d}</span></li>`;
+});
+html+=`</ul>`;
+html+=`</div>`;
+}
+if(node.documentTypes&&node.documentTypes.length>0){
+html+=`<div class="panel-section">`;
+html+=`<h3><i data-lucide="file-text"></i> Documents attendus</h3>`;
+html+=`<div class="doc-types">`;
+node.documentTypes.forEach(dt=>{
+html+=`<span class="doc-tag">${dt}</span>`;
+});
+html+=`</div>`;
+html+=`</div>`;
+}
+if(node.branches&&node.branches.length>0){
+html+=`<div class="panel-section">`;
+html+=`<h3><i data-lucide="git-branch"></i> Branches possibles</h3>`;
+html+=`<div style="display:flex;gap:10px">`;
+node.branches.forEach(b=>{
+html+=`<div style="flex:1;padding:12px;border-radius:8px;text-align:center;font-size:13px;font-weight:500;background:${b.color}15;border:1px solid ${b.color}30;color:${b.color}">${b.label}</div>`;
+});
+html+=`</div>`;
+html+=`</div>`;
+}
+html+=`</div>`;
+document.getElementById('panel-content').innerHTML=html;
+document.getElementById('detail-panel').classList.remove('hidden');
+renderFlowchart();
+lucide.createIcons();
+}
+
+function closePanel(){
+document.getElementById('detail-panel').classList.add('hidden');
+}
+
+// ============================================================
+// EXPLORER
+// ============================================================
+function renderExplorer(){
+renderBreadcrumb();
+const content=document.getElementById('explorer-content');
+if(explorerLevel==='companies')renderCompanies(content);
+else if(explorerLevel==='projects')renderProjects(content);
+else if(explorerLevel==='steps')renderSteps(content);
+else if(explorerLevel==='files')renderFiles(content);
+updateStats();
+}
+
+function renderBreadcrumb(){
+const el=document.getElementById('breadcrumb');
+let html='';
+html+=`<button class="${explorerLevel==='companies'?'active':''}" onclick="goLevel('companies')">Accueil</button>`;
+if(selectedCompany){
+html+=`<span class="breadcrumb-sep">/</span>`;
+html+=`<button class="${explorerLevel==='projects'?'active':''}" onclick="goLevel('projects')">${selectedCompany.name}</button>`;
+}
+if(selectedProject){
+html+=`<span class="breadcrumb-sep">/</span>`;
+html+=`<button class="${explorerLevel==='steps'?'active':''}" onclick="goLevel('steps')">${selectedProject.code} ${selectedProject.name}</button>`;
+}
+if(selectedStep){
+html+=`<span class="breadcrumb-sep">/</span>`;
+html+=`<button class="active">${selectedStep.title}</button>`;
+}
+el.innerHTML=html;
+}
+
+function goLevel(level){
+explorerLevel=level;
+if(level==='companies'){selectedCompany=null;selectedProject=null;selectedStep=null;}
+if(level==='projects'){selectedProject=null;selectedStep=null;}
+if(level==='steps'){selectedStep=null;}
+renderExplorer();
+}
+
+function renderCompanies(container){
+let html='<div class="card-grid">';
+companies.forEach(c=>{
+const pCount=projects.filter(p=>p.companyId===c.id).length;
+html+=`<div class="card" onclick="selectCompany(${c.id})">`;
+html+=`<div class="card-header">`;
+html+=`<div class="card-icon" style="background:${c.color}20;color:${c.color}"><i data-lucide="building-2" style="width:18px;height:18px"></i></div>`;
+html+=`<div><div class="card-title">${c.name}</div><div class="card-subtitle">${c.notes||''}</div></div>`;
+html+=`</div>`;
+html+=`<div class="card-meta"><span>${pCount} projet${pCount>1?'s':''}</span></div>`;
+html+=`<div class="card-actions"><button class="btn-sm danger" onclick="event.stopPropagation();deleteCompany(${c.id})">Supprimer</button></div>`;
+html+=`</div>`;
+});
+html+=`<button class="add-card" onclick="showAddCompany()"><i data-lucide="plus" style="width:16px;height:16px"></i> Ajouter une entreprise</button>`;
+html+='</div>';
+container.innerHTML=html;
+lucide.createIcons();
+}
+
+function selectCompany(id){
+selectedCompany=companies.find(c=>c.id===id);
+explorerLevel='projects';
+renderExplorer();
+}
+
+function renderProjects(container){
+if(!selectedCompany)return;
+const companyProjects=projects.filter(p=>p.companyId===selectedCompany.id);
+let html='<div class="card-grid">';
+companyProjects.forEach(p=>{
+const statusColors={active:'#d97706',won:'#16a34a',lost:'#dc2626',archived:'#6b7280'};
+const statusLabels={active:'En cours',won:'Gagne',lost:'Perdu',archived:'Archive'};
+const fCount=files.filter(f=>f.projectId===p.id).length;
+html+=`<div class="card" onclick="selectProject(${p.id})">`;
+html+=`<div class="card-header">`;
+html+=`<div class="card-icon" style="background:${statusColors[p.status]}20;color:${statusColors[p.status]}"><i data-lucide="folder" style="width:18px;height:18px"></i></div>`;
+html+=`<div><div class="card-title">${p.code} ${p.name}</div><div class="card-subtitle">${p.notes||''}</div></div>`;
+html+=`</div>`;
+html+=`<div class="card-meta">`;
+html+=`<span style="color:${statusColors[p.status]};font-weight:500">${statusLabels[p.status]}</span>`;
+html+=`<span>${fCount} fichier${fCount>1?'s':''}</span>`;
+html+=`</div>`;
+html+=`<div class="card-actions"><button class="btn-sm danger" onclick="event.stopPropagation();deleteProject(${p.id})">Supprimer</button></div>`;
+html+=`</div>`;
+});
+html+=`<button class="add-card" onclick="showAddProject()"><i data-lucide="plus" style="width:16px;height:16px"></i> Ajouter un projet</button>`;
+html+='</div>';
+container.innerHTML=html;
+lucide.createIcons();
+}
+
+function selectProject(id){
+selectedProject=projects.find(p=>p.id===id);
+explorerLevel='steps';
+renderExplorer();
+}
+
+function renderSteps(container){
+if(!selectedProject)return;
+let html='<div class="step-grid">';
+flowNodes.forEach(node=>{
+if(node.type==='branch')return;
+const fCount=files.filter(f=>f.projectId===selectedProject.id&&f.stepId===node.id).length;
+const Icon=iconMap[node.icon]||'circle';
+html+=`<div class="step-folder" onclick="selectStep('${node.id}')">`;
+html+=`<div class="step-folder-header">`;
+html+=`<div class="step-folder-icon"><i data-lucide="${Icon}" style="width:14px;height:14px"></i></div>`;
+html+=`<div class="step-folder-title">${node.title}</div>`;
+html+=`</div>`;
+html+=`<div class="step-folder-desc">${node.folderName}</div>`;
+html+=`<div class="step-folder-files">${fCount} fichier${fCount!==1?'s':''}</div>`;
+html+=`</div>`;
+});
+html+='</div>';
+container.innerHTML=html;
+lucide.createIcons();
+}
+
+function selectStep(stepId){
+selectedStep=flowNodes.find(n=>n.id===stepId);
+explorerLevel='files';
+renderExplorer();
+}
+
+function renderFiles(container){
+if(!selectedProject||!selectedStep)return;
+const stepFiles=files.filter(f=>f.projectId===selectedProject.id&&f.stepId===selectedStep.id);
+let html='';
+html+=`<div style="margin-bottom:16px">`;
+html+=`<h3 style="font-size:15px;font-weight:600;margin-bottom:4px">${selectedStep.title}</h3>`;
+html+=`<p style="font-size:12px;color:#9ca3af">${selectedStep.folderName} — ${selectedProject.code} ${selectedProject.name}</p>`;
+html+=`</div>`;
+html+=`<div class="file-drop-zone" id="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">`;
+html+=`<i data-lucide="upload-cloud" style="width:28px;height:28px;color:#d1d5db;margin:0 auto 8px;display:block"></i>`;
+html+=`<p>Glissez-deposez vos fichiers ici<br><span style="font-size:11px">PDF, Word, Excel, Images</span></p>`;
+html+=`<input type="file" multiple id="file-input" style="display:none" onchange="handleFileSelect(event)">`;
+html+=`<button class="btn-primary" style="margin-top:10px" onclick="document.getElementById('file-input').click()">Selectionner des fichiers</button>`;
+html+=`</div>`;
+if(stepFiles.length===0){
+html+=`<div class="empty-state"><i data-lucide="folder-open" style="width:32px;height:32px"></i><p>Aucun fichier dans cette etape</p></div>`;
+}else{
+html+=`<div class="file-list">`;
+stepFiles.forEach(f=>{
+const iconClass=f.type;
+const iconName=f.type==='pdf'?'file-text':f.type==='doc'?'file-text':f.type==='xls'?'table':f.type==='image'?'image':'file';
+html+=`<div class="file-item">`;
+html+=`<div class="file-icon ${iconClass}"><i data-lucide="${iconName}" style="width:16px;height:16px"></i></div>`;
+html+=`<div class="file-name">${f.name}</div>`;
+html+=`<div class="file-meta">${f.size} — ${f.date}</div>`;
+html+=`<button class="file-delete" onclick="deleteFile(${f.id})"><i data-lucide="trash-2" style="width:13px;height:13px"></i></button>`;
+html+=`</div>`;
+});
+html+='</div>';
+}
+container.innerHTML=html;
+lucide.createIcons();
+}
+
+// File upload
+function handleDragOver(e){e.preventDefault();e.currentTarget.classList.add('dragover');}
+function handleDragLeave(e){e.currentTarget.classList.remove('dragover');}
+function handleDrop(e){e.preventDefault();e.currentTarget.classList.remove('dragover');processFiles(e.dataTransfer.files);}
+function handleFileSelect(e){processFiles(e.target.files);}
+function processFiles(fileList){
+if(!selectedProject||!selectedStep)return;
+Array.from(fileList).forEach(file=>{
+const ext=file.name.split('.').pop().toLowerCase();
+const typeMap={pdf:'pdf',doc:'doc',docx:'doc',xls:'xls',xlsx:'xls',png:'image',jpg:'image',jpeg:'image',gif:'image'};
+const type=typeMap[ext]||'other';
+const size=file.size>1024*1024?(file.size/(1024*1024)).toFixed(1)+' MB':(file.size/1024).toFixed(0)+' KB';
+const newFile={id:Date.now()+Math.random(),projectId:selectedProject.id,stepId:selectedStep.id,name:file.name,type,size,date:new Date().toISOString().split('T')[0]};
+files.push(newFile);
+});
+saveFiles();
+renderExplorer();
+}
+function saveFiles(){localStorage.setItem('demo_files',JSON.stringify(files));}
+function deleteFile(id){files=files.filter(f=>f.id!==id);saveFiles();renderExplorer();}
+function deleteCompany(id){companies=companies.filter(c=>c.id!==id);projects=projects.filter(p=>p.companyId!==id);files=files.filter(f=>!projects.some(p=>p.id===f.projectId&&p.companyId===id));saveCompanies();saveProjects();saveFiles();renderExplorer();}
+function deleteProject(id){projects=projects.filter(p=>p.id!==id);files=files.filter(f=>f.projectId!==id);saveProjects();saveFiles();renderExplorer();}
+function saveCompanies(){localStorage.setItem('demo_companies',JSON.stringify(companies));}
+function saveProjects(){localStorage.setItem('demo_projects',JSON.stringify(projects));}
+
+// Modal
+function showAddCompany(){
+document.getElementById('modal-title').textContent="Ajouter une entreprise";
+document.getElementById('modal-body').innerHTML='<input type="text" id="company-name" placeholder="Nom de l\'entreprise"><textarea id="company-notes" placeholder="Notes (optionnel)" rows="3"></textarea>';
+modalCallback=()=>{
+const name=document.getElementById('company-name').value.trim();
+if(!name)return;
+const colors=['#1E3A5F','#7C3AED','#059669','#d97706','#dc2626','#0891b2'];
+companies.push({id:Date.now(),name,notes:document.getElementById('company-notes').value,color:colors[companies.length%colors.length]});
+saveCompanies();closeModal();renderExplorer();
+};
+document.getElementById('modal').classList.remove('hidden');
+}
+function showAddProject(){
+if(!selectedCompany)return;
+document.getElementById('modal-title').textContent="Ajouter un projet";
+document.getElementById('modal-body').innerHTML='<input type="text" id="proj-code" placeholder="Code AIM (ex: AIM-2025-006)"><input type="text" id="proj-name" placeholder="Nom du projet"><textarea id="proj-notes" placeholder="Notes (optionnel)" rows="2"></textarea>';
+modalCallback=()=>{
+const code=document.getElementById('proj-code').value.trim();
+const name=document.getElementById('proj-name').value.trim();
+if(!code||!name)return;
+projects.push({id:Date.now(),code,name,companyId:selectedCompany.id,status:'active',notes:document.getElementById('proj-notes').value});
+saveProjects();closeModal();renderExplorer();
+};
+document.getElementById('modal').classList.remove('hidden');
+}
+function confirmModal(){if(modalCallback)modalCallback();}
+function closeModal(){document.getElementById('modal').classList.add('hidden');modalCallback=null;}
+function updateStats(){
+document.getElementById('stat-companies').textContent=companies.length+' entreprise'+(companies.length>1?'s':'');
+document.getElementById('stat-projects').textContent=projects.length+' projet'+(projects.length>1?'s':'');
+document.getElementById('stat-files').textContent=files.length+' fichier'+(files.length>1?'s':'');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded',()=>{
+renderExplorer();
+lucide.createIcons();
+});
+</script>
+</body>
+</html>
