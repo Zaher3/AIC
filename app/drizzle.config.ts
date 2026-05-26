@@ -1,10 +1,12 @@
 import { defineConfig } from "drizzle-kit";
+import { createRequire } from "module";
 
 // En local : charge .env si présent
 // En production (Railway) : les variables sont déjà injectées
 if (process.env.NODE_ENV !== "production") {
   try {
-    await import("dotenv/config");
+    const require = createRequire(import.meta.url);
+    require("dotenv/config");
   } catch {
     // dotenv non installé ou .env manquant — ignore
   }
