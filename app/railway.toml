@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-
+NIXPACKS_NODE_VERSION=20
 [deploy]
 startCommand = "NODE_ENV=production node dist/boot.js"
 restartPolicyType = "ON_FAILURE"
