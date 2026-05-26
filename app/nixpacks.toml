@@ -1,0 +1,12 @@
+[phases.build]
+cmds = [
+  "npm install",
+  "npm run build",
+  "npm run db:generate"
+]
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[start]
+cmd = "NODE_ENV=production node dist/boot.js"
