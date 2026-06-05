@@ -20,7 +20,7 @@ app.use("/api/trpc/*", async (c) => {
     createContext,
   });
 });
-appapp.get("/api/health", (c) => c.json({ status: "ok" }));
+app.get("/api/health", (c) => c.json({ status: "ok", env: env.isProduction ? "production" : "development" }));
 app.all("/api/*", (c) => c.json({ error: "Not Found" }, 404));
 
 export default app;

@@ -1,29 +1,41 @@
-import devServer from "@hono/vite-dev-server"
-import path from "path"
-const __dirname = import.meta.dirname
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
-import { inspectAttr } from 'kimi-plugin-inspect-react'
+import path from "path";
+import { fileURLToPath } from "url";
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const env = loadEnv("", process.cwd(), "");
+
+const OUT_DIR = "dist/public";
+
 export default defineConfig({
-  plugins: [
-    devServer({ entry: "api/boot.ts", exclude: [/^\/(?!api\/).*$/] }),
-    inspectAttr(), react()],
-  server: {
-    port: 3000,
-  },
+  envDir: path.resolve(__dirname),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@contracts": path.resolve(__dirname, "./contracts"),
       "@db": path.resolve(__dirname, "./db"),
-      "db": path.resolve(__dirname, "./db"),
+      "@server": path.resolve(__dirname, "./server"),
+      "@contracts": path.resolve(__dirname, "./contracts"),
     },
   },
-  envDir: path.resolve(__dirname),
+  define: {
+    "import.meta.env.VITE_APP_ID": JSON.stringify(
+      env.APP_ID ?? env.VITE_APP_ID ?? "",
+    ),
+  },
+  plugins: [react()],
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
-    emptyOutDir: true,
+    outDir: OUT_DIR,
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
+    port: 5173,
   },
 });
