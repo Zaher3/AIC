@@ -11,15 +11,14 @@ import {
 import Flowchart from "@/components/Flowchart";
 import StepDetailPanel from "@/components/StepDetailPanel";
 import {
-  Map, FolderTree, LogOut, Shield, Users, User,
+  Map, FolderTree, LogOut, Shield, Users, User, Settings,
 } from "lucide-react";
-
-type ViewMode = "flowchart" | "explorer" | "team" | "profile";
 import Team from "./Team";
 import Profile from "./Profile";
+
+type ViewMode = "flowchart" | "explorer" | "team" | "profile";
 type ExplorerLevel = "companies" | "projects" | "steps" | "files";
 
-// Types matching DB schema
 interface CompanyItem {
   id: number;
   name: string;
@@ -45,7 +44,6 @@ const roleLabels: Record<string, { label: string; icon: typeof User; color: stri
 export default function Home() {
   const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
 
-  // View state
   const [viewMode, setViewMode] = useState<ViewMode>("explorer");
   const [explorerLevel, setExplorerLevel] = useState<ExplorerLevel>("companies");
   const [selectedCompany, setSelectedCompany] = useState<CompanyItem | null>(null);
@@ -54,7 +52,6 @@ export default function Home() {
   const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
   const [selectedFlowNode, setSelectedFlowNode] = useState<FlowNode | null>(null);
 
-  // tRPC data
   const { companies, isLoading: companiesLoading, create: createCompany, delete: deleteCompany } = useCompanies();
   const { projects, create: createProject, delete: deleteProject } = useProjects(selectedCompany?.id);
   const { files: projectFiles, addFile, removeFile } = useFiles(selectedProject?.id ?? 0);
@@ -63,7 +60,6 @@ export default function Home() {
   const RoleConfig = roleLabels[userRole] ?? roleLabels.commercial;
   const RoleIcon = RoleConfig.icon;
 
-  // Navigation
   const handleSelectCompany = useCallback((company: CompanyItem) => {
     setSelectedCompany(company);
     setExplorerLevel("projects");
@@ -101,7 +97,6 @@ export default function Home() {
     setSelectedFlowNode(null);
   }, []);
 
-  // Loading state
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
@@ -113,7 +108,6 @@ export default function Home() {
     );
   }
 
-  // Not logged in
   if (!isAuthenticated || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
@@ -139,7 +133,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -157,7 +150,6 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* View mode toggle */}
             <div className="flex items-center bg-gray-100 rounded-lg p-0.5">
               <button
                 onClick={() => setViewMode("explorer")}
@@ -173,33 +165,27 @@ export default function Home() {
                 <Map size={14} />
                 <span className="hidden sm:inline">Processus</span>
               </button>
-              sed -i '/<span className="hidden sm:inline">Processus<\/span>/,/<\/button>/{
-  /<\/button>/a\
-              <button\
-                onClick={() => setViewMode("team")}\
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "team" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}\
-              >\
-                <Users size={14} />\
-                <span className="hidden sm:inline">Equipe</span>\
-              </button>\
-              <button\
-                onClick={() => setViewMode("profile")}\
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "profile" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}\
-              >\
-                <Settings size={14} />\
-                <span className="hidden sm:inline">Profil</span>\n
-              
+              <button
+                onClick={() => setViewMode("team")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "team" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              >
+                <Users size={14} />
+                <span className="hidden sm:inline">Equipe</span>
               </button>
-}
+              <button
+                onClick={() => setViewMode("profile")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "profile" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              >
+                <Settings size={14} />
+                <span className="hidden sm:inline">Profil</span>
+              </button>
             </div>
 
-            {/* User info */}
             <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${RoleConfig.color}`}>
               <RoleIcon size={12} />
               {user.name ?? userRole}
             </div>
 
-            {/* Logout */}
             <button
               onClick={logout}
               className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
@@ -211,11 +197,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-6">
-        {viewMode === "explorer" ? (
+        {viewMode === "team" ? (
+          <Team />
+        ) : viewMode === "profile" ? (
+          <Profile />
+        ) : viewMode === "explorer" ? (
           <div className="space-y-5">
-            {/* Breadcrumb */}
             {explorerLevel !== "companies" && (
               <div className="flex items-center gap-1 text-sm">
                 <button onClick={() => handleBack("companies")} className="flex items-center gap-1.5 px-2 py-1 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-md transition-colors">
@@ -248,7 +236,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Explorer levels */}
             {explorerLevel === "companies" && (
               <>
                 <div className="text-center max-w-2xl mx-auto mb-8">
@@ -328,7 +315,6 @@ export default function Home() {
             )}
           </div>
         ) : (
-          /* Flowchart View */
           <div className="space-y-6">
             <div className="text-center max-w-2xl mx-auto">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Processus Commercial et de Chiffrage</h2>
@@ -349,7 +335,6 @@ export default function Home() {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-gray-100 bg-gray-50 mt-auto">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">Cartographie Interactive — Service Commercial & Estimation des Couts</p>
