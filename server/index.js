@@ -53,7 +53,7 @@ app.use("/api/users", usersRoutes);
 if (process.env.NODE_ENV === "production") {
   const staticPath = path.join(__dirname, "../dist/public");
   app.use(express.static(staticPath));
-  app.get("*", (req, res) => {
+  app.get("/{*path}", (req, res) => {
     if (!req.path.startsWith("/api")) {
       res.sendFile(path.join(staticPath, "index.html"));
     }
@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // ======== ERROR HANDLING ========
-app.use("/api/*", (req, res) => {
+app.use("/api/*path", (req, res) => {
   res.status(404).json({
     error: "Not Found",
     message: `Route ${req.method} ${req.path} not found`,
