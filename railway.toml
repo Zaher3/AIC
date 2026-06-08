@@ -2,7 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "NODE_ENV=production node dist/boot.js"
+startCommand = "NODE_ENV=production node dist/index.js"
 restartPolicyType = "ON_FAILURE"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 30

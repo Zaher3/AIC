@@ -9,4 +9,4 @@ cmds = [
 nixPkgs = ["nodejs_20"]
 
 [start]
-cmd = "NODE_ENV=production node dist/boot.js"
+cmd = "NODE_ENV=production node dist/index.js"
