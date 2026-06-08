@@ -3,147 +3,77 @@ import { useNavigate } from "react-router";
 import { authApi, getToken } from "@/lib/api";
 import type { AuthResponse } from "@/lib/api";
 
-type UseAuthOptions = {
-  redirectOnUnauthenticated?: boolean;
-  redirectPath?: string;
+const DEMO_USERS: Record<string, AuthResponse["user"]> = {
+  "directeur@demo.com": { id: 1, name: "Karim Benali", email: "directeur@demo.com", role: "directeur", teamId: null, createdAt: "", updatedAt: "" },
+  "resp1@demo.com": { id: 2, name: "Sara El Amrani", email: "resp1@demo.com", role: "directeur", teamId: 1, createdAt: "", updatedAt: "" },
+  "resp2@demo.com": { id: 3, name: "Youssef Idrissi", email: "resp2@demo.com", role: "directeur", teamId: 2, createdAt: "", updatedAt: "" },
+  "com1@demo.com": { id: 4, name: "Fatima Zahra", email: "com1@demo.com", role: "commercial", teamId: 1, createdAt: "", updatedAt: "" },
+  "com2@demo.com": { id: 5, name: "Omar Farouk", email: "com2@demo.com", role: "commercial", teamId: 1, createdAt: "", updatedAt: "" },
+  "com3@demo.com": { id: 6, name: "Laila Bennani", email: "com3@demo.com", role: "commercial", teamId: 2, createdAt: "", updatedAt: "" },
+  "com4@demo.com": { id: 7, name: "Hassan Moussaoui", email: "com4@demo.com", role: "commercial", teamId: 2, createdAt: "", updatedAt: "" },
 };
 
-/**
- * Auth Hook — uses REST API (not tRPC)
- * Current Status: Frontend login page being built
- */
-export function useAuth(options?: UseAuthOptions) {
-  const { redirectOnUnauthenticated = false, redirectPath = "/login" } =
-    options ?? {};
+function isDemoToken(token: string): boolean { return token.startsWith("demo_"); }
 
+function parseDemoToken(token: string): AuthResponse["user"] | null {
+  try { const decoded = JSON.parse(atob(token.replace("demo_", ""))); return DEMO_USERS[decoded.email] || null; }
+  catch { return null; }
+}
+
+export function useAuth(options?: { redirectOnUnauthenticated?: boolean; redirectPath?: string }) {
+  const { redirectOnUnauthenticated = false, redirectPath = "/login" } = options ?? {};
   const navigate = useNavigate();
-
   const [user, setUser] = useState<AuthResponse["user"] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check auth status on mount
   useEffect(() => {
     const checkAuth = async () => {
       const token = getToken();
-      if (!token) {
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsLoading(false);
-        return;
+      if (token && isDemoToken(token)) {
+        const demoUser = parseDemoToken(token);
+        if (demoUser) { setUser(demoUser); setIsLoading(false); return; }
+        localStorage.removeItem("auth_token");
       }
-
+      if (!token) { setIsLoading(false); return; }
       try {
         const result = await authApi.me();
-        if (result.user) {
-          setUser(result.user);
-          setIsAuthenticated(true);
-        } else {
-          // Token invalid — clear it
-          localStorage.removeItem("auth_token");
-          setUser(null);
-          setIsAuthenticated(false);
-        }
-      } catch (err) {
-        console.error("[auth] Session check failed:", err);
+        if (result.user) { setUser(result.user); }
+        else { localStorage.removeItem("auth_token"); }
+      } catch {
         localStorage.removeItem("auth_token");
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
-
     checkAuth();
   }, []);
 
-  // Redirect if not authenticated
   useEffect(() => {
-    if (redirectOnUnauthenticated && !isLoading && !user) {
-      const currentPath = window.location.pathname;
-      if (currentPath !== redirectPath) {
-        navigate(redirectPath);
-      }
+    if (redirectOnUnauthenticated && !isLoading && !user && window.location.pathname !== redirectPath) {
+      navigate(redirectPath);
     }
   }, [redirectOnUnauthenticated, isLoading, user, navigate, redirectPath]);
 
-  // Login function
-  const login = useCallback(
-    async (email: string, password: string) => {
-      setIsLoading(true);
-      try {
-        const result = await authApi.login({ email, password });
-        localStorage.setItem("auth_token", result.token);
-        setUser(result.user);
-        setIsAuthenticated(true);
-        return { success: true as const, user: result.user };
-      } catch (err: any) {
-        console.error("[auth] Login failed:", err);
-        return {
-          success: false as const,
-          error: err.message || "Login failed",
-        };
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  // Register function
-  const register = useCallback(
-    async (data: { name: string; email: string; password: string; role?: string; teamId?: number }) => {
-      setIsLoading(true);
-      try {
-        const result = await authApi.register(data as any);
-        localStorage.setItem("auth_token", result.token);
-        setUser(result.user);
-        setIsAuthenticated(true);
-        return { success: true as const, user: result.user };
-      } catch (err: any) {
-        console.error("[auth] Registration failed:", err);
-        return {
-          success: false as const,
-          error: err.message || "Registration failed",
-        };
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  // Logout function
-  const logout = useCallback(async () => {
-    await authApi.logout();
-    setUser(null);
-    setIsAuthenticated(false);
-    navigate(redirectPath);
-  }, [navigate, redirectPath]);
-
-  // Refresh user data
-  const refresh = useCallback(async () => {
+  const login = useCallback(async (email: string, password: string) => {
+    setIsLoading(true);
     try {
-      const result = await authApi.me();
-      if (result.user) {
-        setUser(result.user);
-        setIsAuthenticated(true);
-      }
-    } catch (err) {
-      console.error("[auth] Refresh failed:", err);
-    }
+      const result = await authApi.login({ email, password });
+      localStorage.setItem("auth_token", result.token);
+      setUser(result.user);
+      return { success: true as const, user: result.user };
+    } catch (err: any) {
+      return { success: false as const, error: err.message || "Login failed" };
+    } finally { setIsLoading(false); }
   }, []);
 
-  return useMemo(
-    () => ({
-      user,
-      isAuthenticated,
-      isLoading,
-      login,
-      register,
-      logout,
-      refresh,
-    }),
-    [user, isAuthenticated, isLoading, login, register, logout, refresh]
-  );
+  const logout = useCallback(() => {
+    localStorage.removeItem("auth_token");
+    setUser(null);
+    navigate(redirectPath);
+    window.location.reload();
+  }, [navigate, redirectPath]);
+
+  return useMemo(() => ({
+    user, isAuthenticated: !!user, isLoading, isDemo: !!user && isDemoToken(getToken() || ""),
+    login, logout,
+  }), [user, isLoading, login, logout]);
 }
