@@ -14,7 +14,9 @@ import {
   Map, FolderTree, LogOut, Shield, Users, User,
 } from "lucide-react";
 
-type ViewMode = "flowchart" | "explorer";
+type ViewMode = "flowchart" | "explorer" | "team" | "profile";
+import Team from "./Team";
+import Profile from "./Profile";
 type ExplorerLevel = "companies" | "projects" | "steps" | "files";
 
 // Types matching DB schema
@@ -171,6 +173,24 @@ export default function Home() {
                 <Map size={14} />
                 <span className="hidden sm:inline">Processus</span>
               </button>
+              sed -i '/<span className="hidden sm:inline">Processus<\/span>/,/<\/button>/{
+  /<\/button>/a\
+              <button\
+                onClick={() => setViewMode("team")}\
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "team" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}\
+              >\
+                <Users size={14} />\
+                <span className="hidden sm:inline">Equipe</span>\
+              </button>\
+              <button\
+                onClick={() => setViewMode("profile")}\
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${viewMode === "profile" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}\
+              >\
+                <Settings size={14} />\
+                <span className="hidden sm:inline">Profil</span>\n
+              
+              </button>
+}
             </div>
 
             {/* User info */}
