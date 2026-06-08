@@ -67,7 +67,6 @@ export default function Login() {
       // Store token and redirect
       localStorage.setItem("auth_token", data.token);
       navigate("/");
-      window.location.reload();
     } catch (err) {
       setError("Network error. Is the server running?");
     } finally {
@@ -102,7 +101,6 @@ export default function Login() {
       // Store token and redirect
       localStorage.setItem("auth_token", data.token);
       navigate("/");
-      window.location.reload();
     } catch (err) {
       setError("Network error. Is the server running?");
     } finally {
@@ -120,7 +118,6 @@ export default function Login() {
       "demo_" + btoa(JSON.stringify({ email, name: demoUser.name, role: demoUser.label }))
     );
     navigate("/");
-    window.location.reload();
   }
 
   return (
