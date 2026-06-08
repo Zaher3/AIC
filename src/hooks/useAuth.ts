@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { authApi, getToken } from "@/lib/api";
+import { initDemoData } from "@/lib/demo-data";
 import type { AuthResponse } from "@/lib/api";
 
 const DEMO_USERS: Record<string, AuthResponse["user"]> = {
@@ -31,7 +32,7 @@ export function useAuth(options?: { redirectOnUnauthenticated?: boolean; redirec
       const token = getToken();
       if (token && isDemoToken(token)) {
         const demoUser = parseDemoToken(token);
-        if (demoUser) { setUser(demoUser); setIsLoading(false); return; }
+        if (demoUser) { setUser(demoUser); initDemoData(); setIsLoading(false); return; }
         localStorage.removeItem("auth_token");
       }
       if (!token) { setIsLoading(false); return; }
